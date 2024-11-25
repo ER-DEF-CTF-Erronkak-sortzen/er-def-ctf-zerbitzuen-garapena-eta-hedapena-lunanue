@@ -1,0 +1,14 @@
+version: '3'
+services:
+    ftp:
+        build:
+            context: ./ftp
+            dockerfile: Dockerfile
+        ports:
+            - "2100:21"
+    www:
+        build:
+            context: ./www
+            dockerfile: Dockerfile
+        ports:
+            - "8888:80"

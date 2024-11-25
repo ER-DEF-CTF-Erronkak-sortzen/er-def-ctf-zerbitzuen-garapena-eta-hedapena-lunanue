@@ -1,0 +1,54 @@
+# Usa una imagen base de Debian
+FROM debian:latest
+
+# Actualiza el sistema e instala vsftpd
+RUN apt-get update && apt-get install -y vsftpd
+
+# Crea el usuario FTP y establece la contraseña
+RUN useradd -m ftpuser && echo "ftpuser:1234" | chpasswd
+
+# Crea los directorios de upload, download y secure chroot
+RUN mkdir -p /home/ftpuser/upload /home/ftpuser/download /var/run/vsftpd/empty && \
+    chown -R ftpuser:ftpuser /home/ftpuser && \
+    chown root:root /var/run/vsftpd/empty && \
+    chmod 755 /var/run/vsftpd/empty
+
+# Copia la configuración de vsftpd
+COPY vsftpd.conf /etc/vsftpd.conf
+
+# Copia la lista de usuarios permitidos
+COPY vsftpd.userlist /etc/vsftpd.userlist
+
+# Expon el puerto 21
+EXPOSE 21
+
+# Comando para ejecutar el servicio vsftpd
+CMD ["/usr/sbin/vsftpd", "/etc/vsftpd/vsftpd.conf"]
+# Usa una imagen base de Debian
+FROM debian:latest
+
+# Actualiza el sistema e instala vsftpd
+RUN apt-get update && apt-get install -y vsftpd
+
+# Crea el usuario FTP y establece la contraseña
+RUN useradd -m blue && echo "blue:1234" | chpasswd
+
+# Crea los directorios de upload, download y secure chroot
+RUN mkdir -p /home/blue/upload /home/blue/download /var/run/vsftpd/empty && \
+    chown -R blue:blue /home/blue && \
+    chown root:root /var/run/vsftpd/empty && \
+    chmod 755 /var/run/vsftpd/empty
+
+# Copia la configuración de vsftpd
+COPY vsftpd.conf /etc/vsftpd.conf
+
+# Copia la lista de usuarios permitidos
+COPY vsftpd.userlist /etc/vsftpd.userlist
+
+COPY rosesarered.txt /home/blue/upload/rosesarered.txt
+
+# Expon el puerto 21
+EXPOSE 21
+
+# Comando para ejecutar el servicio vsftpd
+CMD ["/usr/sbin/vsftpd", "/etc/vsftpd/vsftpd.conf"]
