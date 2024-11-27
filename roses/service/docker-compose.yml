@@ -1,0 +1,20 @@
+version: '3'
+services:
+    ssh:
+        build:
+            context: ./ssh
+            dockerfile: Dockerfile
+        ports:
+            - "2200:22"
+    www:
+        build:
+            context: ./www
+            dockerfile: Dockerfile
+        ports:
+            - "8888:80"
+    web:
+        build:
+            context: ./web
+            dockerfile: Dockerfile
+        ports:
+            - "80:80"
