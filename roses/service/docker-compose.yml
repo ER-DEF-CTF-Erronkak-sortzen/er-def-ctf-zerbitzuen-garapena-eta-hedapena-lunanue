@@ -12,3 +12,9 @@ services:
             dockerfile: Dockerfile
         ports:
             - "8888:80"
+    web:
+        build:
+            context: ./web
+            dockerfile: Dockerfile
+        ports:
+            - "80:80"
