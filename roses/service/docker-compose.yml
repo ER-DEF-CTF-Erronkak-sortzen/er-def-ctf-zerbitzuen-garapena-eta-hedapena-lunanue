@@ -1,11 +1,11 @@
 version: '3'
 services:
-    ftp:
+    ssh:
         build:
-            context: ./ftp
+            context: ./ssh
             dockerfile: Dockerfile
         ports:
-            - "2100:21"
+            - "2200:22"
     www:
         build:
             context: ./www
