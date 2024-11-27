@@ -145,11 +145,12 @@ class MyChecker(checkerlib.BaseChecker):
         ssh_session = self.client
         command = f"docker exec roses_www_1 sh -c 'chmod 644 {path} -v | grep retained '"
         stdin, stdout, stderr = ssh_session.exec_command(command)
-        if stdout.length() == 0:
+        if len(stdout) == 0:
             return False
         return True
-  
-    # Private Funcs - Return False if error
+    
+    @ssh_connect()
+    # Private Funcs - Return False if error  --- HOR GAINEAN DAGOAN SSH_CONNECT HORI EZ DA PASAPASAN AGERTZEN ????
     def _add_new_flag(self, ssh_session, flag):
         # Execute the file creation command in the container
         command = f"docker exec roses_www_1 sh -c 'echo {flag} >> /var/www/html/dontlookhere.txt'"

@@ -41,5 +41,6 @@ The last step is to access the other web server and to use that hash as the pass
 - WWW: /usr/local/apache2/htdocs/flaggy.php file's content from roses_www docker has not been changed. 
 - WWW: Permissions of the file 'usr/local/apache2/htdocs/rosesarered.txt' has not been changed.
 
-
+# How to solve the vulnerability
+ - Change the owner of the rosesarered.txt to root user.
 
