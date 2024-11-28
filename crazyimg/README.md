@@ -1,16 +1,23 @@
 
 ################################################
-#               ROSES ARE RED,                 #
-#              BLUE IS THE SKY                 #
-#            YOU WANT TO HACK ME,              #
-#             I DON'T KNOW WHY                 #     
+#   ONE IMAGE, ONE THOUSAND WORDS  - Cr4zY!mG  #     
 ################################################
 
 # Service definition:
-- 3 dockers are deployed (and your mind will be destroyed ;): 
-1. Ubuntu serving a web as a starting point. 
+- 2 dockers are deployed: 
+1. Mysql database. 
 2. Ubuntu with a ssh service.
-3. Ubuntu serving an apache-php web to enter a password which will lead you to the webpage where the flags are placed.
+
+
+
+
+
+
+
+
+
+///TO BE MODIFIED
+
 
 The attacker enters to the web of docker-1 where there is information about how to access trough ssh (docker-2). Once entered, the attacker will get the password to unlock docker-3.
 The flags are stored in that last docker's file (docker-3) and attacker has to let them in his T-Submission machine. 
