@@ -1,7 +1,9 @@
 
 ################################################
 #               ROSES ARE RED,                 #
-#              BLUE IS THE SKY                 #     
+#              BLUE IS THE SKY                 #
+#            YOU WANT TO HACK ME,              #
+#             I DON'T KNOW WHY                 #     
 ################################################
 
 # Service definition:
@@ -26,7 +28,7 @@ www docker is configured to take a copy of php, html and txt files to the '/usr/
     Flags will be stored in 'roses_www_1' docker's '/usr/local/apache2/htdocs/dontlookhere.txt' file. 
 
 # About exploting:
-- The attacker has to inspect the rosesarered.png image showed in the index.html web page; the credentialas are stored inside the image (using steganography) as a message plain text. With those credentials, the attacker can log into roses_ssh docker. Once connected, he will get access to the rosesarered.txt, (at /home/blue/), where a poem of "Roses are red, Blue is the sky..." will be show. 
+- The attacker has to inspect the rosesarered.png image showed in the index.html web page; the credentialas are stored inside the image (using steganography) as a message plain text. With those credentials, the attacker can log into roses_ssh docker. Once connected, he will get access to the rosesarered.txt, (at /home/blue/), where a poem of "Roses are red, Blue is the sky..." will be shown. 
 The password you need for the next step is the result of applying the md5 to the poem file (rosesarered.txt).
 The last step is to access the other web server and to use that hash as the password to enter the final webpage there the flags are being placed (at '/usr/local/apache2/htdocs/dontlookhere.txt').
 - The defender should change 'blue' user's password. 
@@ -41,6 +43,7 @@ The last step is to access the other web server and to use that hash as the pass
 - WWW: Permissions of the file 'usr/local/apache2/htdocs/rosesarered.txt' has not been changed.
 
 # How to solve the vulnerability
+ - Change the 'blue' user's password.
  - Change the owner of the rosesarered.txt to root user.
- - Change the image rosesarered.png in roses_web
+ - Change the image rosesarered.png in roses_web.
 
