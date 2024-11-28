@@ -36,11 +36,11 @@ The last step is to access the other web server and to use that hash as the pass
 - SSH: User 'blue' exists in roses_ssh docker. 
 - SSH: /etc/sshd_config file from roses_ssh docker has not been changed. 
 - WEB: /usr/local/apache2/htdocs/index.html file's content from roses_web docker has not been changed.
-- WEB: /usr/local/apache2/htdocs/rosesarered.png file's content from roses_web docker has not been changed.
 - WWW: /usr/local/apache2/htdocs/index.html file's content from roses_www docker has not been changed.
 - WWW: /usr/local/apache2/htdocs/flaggy.php file's content from roses_www docker has not been changed. 
 - WWW: Permissions of the file 'usr/local/apache2/htdocs/rosesarered.txt' has not been changed.
 
 # How to solve the vulnerability
  - Change the owner of the rosesarered.txt to root user.
+ - Change the image rosesarered.png in roses_web
 

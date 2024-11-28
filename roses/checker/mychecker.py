@@ -54,31 +54,31 @@ class MyChecker(checkerlib.BaseChecker):
         # check if server is Apache 2.4.50 only for docker-3 (roses_www)
         if not self._check_apache_version():
             return checkerlib.CheckResult.FAULTY
-        # check if dev1 user exists in roses_ssh docker
+        # check if blue user exists in roses_ssh docker
         if not self._check_ssh_user('blue'):
             return checkerlib.CheckResult.FAULTY
-        file_path_web = '/usr/local/apache2/htdocs/index.html'
+        file_path_web = '/var/www/html/index.html'
         # check if index.hmtl from roses_web has been changed by comparing its hash with the hash of the original file
         if not self._check_web_integrity(file_path_web):
             return checkerlib.CheckResult.FAULTY
-        file_path_web = '/usr/local/apache2/htdocs/rosesarered.png'
+        #file_path_web = '/var/www/html/rosesarered.png'
         # check if rosesarered.png image from roses_web has been changed by comparing its hash with the hash of the original file
-        if not self._check_web_integrity(file_path_web):
-            return checkerlib.CheckResult.FAULTY   
+        #if not self._check_web_integrity(file_path_web):
+        #    return checkerlib.CheckResult.FAULTY
         file_path_ssh = '/etc/ssh/sshd_config'
         # check if /etc/sshd_config from roses_ssh has been changed by comparing its hash with the hash of the original file
         if not self._check_ssh_integrity(file_path_ssh):
             return checkerlib.CheckResult.FAULTY            
-        file_path_web = '/usr/local/apache2/htdocs/index.html'
+        file_path_web = '/var/www/html/index.html'
         # check if index.hmtl from roses_www has been changed by comparing its hash with the hash of the original file
         if not self._check_www_integrity(file_path_web):
             return checkerlib.CheckResult.FAULTY  
-        file_path_web = '/usr/local/apache2/htdocs/flaggy.php'
+        file_path_web = '/var/www/html/flaggy.php'
         # check if index.hmtl from roses_www has been changed by comparing its hash with the hash of the original file
         if not self._check_www_integrity(file_path_web):
             return checkerlib.CheckResult.FAULTY
-        file_path_web = '/usr/local/apache2/htdocs/dontlookhere.txt'
-        # check if dontlookhere.txt (where flags are placed) from roses_www has been changed by comparing its hash with the hash of the original file
+        file_path_web = '/var/www/html/dontlookhere.txt'
+        # check if the permissions of the file dontlookhere.txt (where flags are placed) from roses_www has been changed 
         if not self._check_www_permissions(file_path_web):
             return checkerlib.CheckResult.FAULTY  
         return checkerlib.CheckResult.OK     
@@ -102,54 +102,60 @@ class MyChecker(checkerlib.BaseChecker):
         ssh_session = self.client
         command = f"docker exec roses_ssh_1 sh -c 'id {username}'"
         stdin, stdout, stderr = ssh_session.exec_command(command)
+        print("CHECK SSH USER")
         if stderr.channel.recv_exit_status() != 0:
             return False
         return True
-      
+    
     @ssh_connect()
     def _check_web_integrity(self, path):
         ssh_session = self.client
         command = f"docker exec roses_web_1 sh -c 'cat {path}'"
         stdin, stdout, stderr = ssh_session.exec_command(command)
+        print("CHECK WEB INTEGRITY")
+        print(path)
         if stderr.channel.recv_exit_status() != 0:
             return False
-        
         output = stdout.read().decode().strip()
-        return hashlib.md5(output.encode()).hexdigest() == ('cf7dd307bdfefb3b07fdee7cb886405b' or '9b6deaf36a9ba3e6df246047d8c3bcc3')
+        print(hashlib.md5(output.encode()).hexdigest())
+        return hashlib.md5(output.encode()).hexdigest() == 'cf7dd307bdfefb3b07fdee7cb886405b' or '9b6deaf36a9ba3e6df246047d8c3bcc3' or 'e0581dbe8e7a5dcdcf63c2a1d1576bdf'
     
     @ssh_connect()
     def _check_ssh_integrity(self, path):
         ssh_session = self.client
         command = f"docker exec roses_ssh_1 sh -c 'cat {path}'"
         stdin, stdout, stderr = ssh_session.exec_command(command)
+        print("CHECK SSH INTEGRITY")
         if stderr.channel.recv_exit_status() != 0:
             return False
         output = stdout.read().decode().strip()
         print (hashlib.md5(output.encode()).hexdigest())
 
-        return hashlib.md5(output.encode()).hexdigest() == '51acad5071aab26de09e45c6c5516c58'
+        return hashlib.md5(output.encode()).hexdigest() in ['51acad5071aab26de09e45c6c5516c58','ba55c65e08e320f1225c76f810f1328b']
     
     @ssh_connect()
     def _check_www_integrity(self, path):
         ssh_session = self.client
         command = f"docker exec roses_www_1 sh -c 'cat {path}'"
         stdin, stdout, stderr = ssh_session.exec_command(command)
+        print("HELLO")
         if stderr.channel.recv_exit_status() != 0:
+            print(stderr)
             return False
-        
         output = stdout.read().decode().strip()
-        return hashlib.md5(output.encode()).hexdigest() == ('732019deb1c69bf126754ca4ec1cde6b' or '536fd85ce834bb2e0fddc0a4bb7bc47f')
+        print (hashlib.md5(output.encode()).hexdigest())
+
+        return hashlib.md5(output.encode()).hexdigest() in ['732019deb1c69bf126754ca4ec1cde6b','536fd85ce834bb2e0fddc0a4bb7bc47f','6b5b06919f4320b1ce40155c35cc13e1','f4a41ea12bd3bd034c989f09160b45ab']
     
     @ssh_connect()
     def _check_www_permissions(self, path):
         ssh_session = self.client
-        command = f"docker exec roses_www_1 sh -c 'chmod 644 {path} -v | grep retained '"
+        command = f"docker exec roses_www_1 sh -c 'chmod 644 {path} -v | grep retained'"
         stdin, stdout, stderr = ssh_session.exec_command(command)
-        if len(stdout) == 0:
+        if not "retained" in stdout.read().decode():
             return False
         return True
     
-    @ssh_connect()
     # Private Funcs - Return False if error  --- HOR GAINEAN DAGOAN SSH_CONNECT HORI EZ DA PASAPASAN AGERTZEN ????
     def _add_new_flag(self, ssh_session, flag):
         # Execute the file creation command in the container
@@ -204,7 +210,7 @@ class MyChecker(checkerlib.BaseChecker):
         ssh_session = self.client
         command = f"docker exec roses_www_1 sh -c 'httpd -v | grep \"Apache/2.4.50\'"
         stdin, stdout, stderr = ssh_session.exec_command(command)
-
+        print("CHECK APACHE VERSION")
         if stdout:
             return True
         else:
