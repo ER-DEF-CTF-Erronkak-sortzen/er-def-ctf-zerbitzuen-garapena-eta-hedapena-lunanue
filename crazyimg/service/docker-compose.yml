@@ -1,0 +1,18 @@
+version: '3'
+services:
+    db:
+        build:
+            context: ./db
+            dockerfile: Dockerfile
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: rootpass
+        volumes:
+            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ssh:
+        build:
+            context: ./ssh
+            dockerfile: Dockerfile
+        ports:
+            - "2200:22"

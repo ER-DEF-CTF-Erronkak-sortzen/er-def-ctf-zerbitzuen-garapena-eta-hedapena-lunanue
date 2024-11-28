@@ -1,0 +1,8 @@
+Roses are red,
+blue is the sky,
+you want to hack me
+and I don't know why,
+you have to be brave
+don't be shy,
+the password you need is
+the md5 of this file.
