@@ -9,10 +9,10 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: rootpass
         volumes:
-            - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+            - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     ssh:
         build:
             context: ./ssh
             dockerfile: Dockerfile
         ports:
-            - "2200:22"
+            - "2222:22"
